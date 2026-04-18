@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PARKIR MOBIL TAMU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    *{box-sizing:border-box;}
+
+    body{
+      font-family: Arial;
+      margin:0;
+      padding:15px;
+      max-width:500px;
+      margin:auto;
+      background:#121212;
+      color:#fff;
+    }
+
+    h2{
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:15px;
+  padding:10px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#2c3e50,#4ca1af);
+  box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  letter-spacing:1px;
+}
+
+    .dashboard{
+      display:flex;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .box{
+      flex:1;
+      padding:10px;
+      border-radius:10px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+    .total{background:#34495e;}
+    .masuk{background:#27ae60;}
+    .keluar{background:#c0392b;}
+
+    input{
+      width:100%;
+      padding:10px;
+      margin:5px 0;
+      border-radius:8px;
+      border:none;
+      background:#1e1e1e;
+      color:#fff;
+    }
+
+    button{
+      width:100%;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      font-weight:bold;
+      color:white;
+      margin-top:5px;
+    }
+
+    .btn-login{background:#8e44ad;}
+    .btn-main{background:#2c3e50;}
+    .btn-hapus{background:#e74c3c;}
+    .btn-checkout{background:#f39c12;}
+    .btn-edit{background:#3498db;}
+    .btn-filter{background:#16a085;}
+.btn-home{
+  background:linear-gradient(135deg,#2ecc71,#3498db);
+  color:#fff;
+  font-weight:bold;
+  border:none;
+  border-radius:8px;
+  padding:10px;
+  width:100%;
+  margin-top:5px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.25);
+  transition:0.2s;
+}
+
+.btn-home:active{
+  transform:scale(0.97);
+}
+    .card{
+      background:#1e1e1e;
+      padding:12px;
+      margin-top:10px;
+      border-radius:12px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .field{
+      padding:6px 10px;
+      margin:4px 0;
+      border-radius:8px;
+      font-weight:bold;
+    }
+
+    .nama{background:#2c3e50;}
+    .kamar{background:#3d2c50;}
+    .posisi{background:#2f3640;}
+    .plat{background:#4a3b2a;}
+
+    .status-masuk{
+      background:#27ae60;
+      padding:4px 10px;
+      border-radius:20px;
+      font-size:12px;
+    }
+
+    .status-keluar{
+      background:#c0392b;
+      padding:4px 10px;
+      border-radius:20px;
+      font-size:12px;
+    }
+
+    img{
+      width:100%;
+      border-radius:10px;
+      margin-top:8px;
+    }
+
+    #adminForm{display:none;}
+    #loading{text-align:center;margin-top:10px;color:#aaa;}
+
+    .judul-mode{
+      text-align:center;
+      font-weight:bold;
+      margin-top:10px;
+      color:#f39c12;
+    }
+
+    .error{
+      border:2px solid #e74c3c !important;
+    }
+
+    .error-text{
+      color:#e74c3c;
+      font-size:12px;
+      margin-top:-5px;
+      margin-bottom:5px;
+    }
+    .img-home-btn{
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.5);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+  z-index:10000;
+  cursor:pointer;
+  backdrop-filter: blur(5px);
+  transition:0.2s;
+}
+
+.img-home-btn:active{
+  transform:translateX(-50%) scale(0.95);
+}
+    .floating-back{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#8e44ad;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  font-weight:bold;
+  box-shadow:0 8px 20px rgba(0,0,0,0.4);
+  z-index:9999;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.floating-back:active{
+  transform:scale(0.9);
+}
+    #imgViewer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  overflow:hidden;
+}
+
+#imgViewer img{
+  max-width:100%;
+  max-height:100%;
+  transform:scale(1);
+  transition:transform 0.15s ease;
+  touch-action:none;
+}
+    .countdown{
+  text-align:center;
+  margin-top:5px;
+  font-size:12px;
+  color:#f1c40f;
+  font-weight:bold;
+}
+/* FULLSCREEN IMAGE VIEWER */
+#imgViewer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  overflow:hidden;
+}
+
+#imgViewer img{
+  max-width:100%;
+  max-height:100%;
+  transform:scale(1);
+  transition:transform 0.2s ease;
+  cursor:grab;
+}
+
+#imgViewer:active img{
+  cursor:grabbing;
+}
+  </style>
+</head>
+
+<body>
+
+<h2>🚗 PARKIR MOBIL TAMU</h2>
+
+<button class="btn-login" onclick="loginAdmin()" style="width:350px; height:48px; position:relative; top:-5px; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+  LOGIN ADMIN
+</button>
+
+<div class="dashboard">
+  <div class="box total" id="totalBox">Total 0</div>
+  <div class="box masuk" id="masukBox">Masuk 0</div>
+  <div class="box keluar" id="keluarBox">Keluar 0</div>
+
+  <div class="box total" id="visitorBox" style="display:none;">
+    Visitor 0
+  </div>
+</div>
+
+<button class="btn-filter" onclick="filterMasuk()" style="width:115px; height:48px;">
+  Masuk
+</button>
+<button class="btn-filter" onclick="filterKeluar()" style="width:115px; height:48px;">
+  Keluar
+</button>
+<button class="btn-filter" onclick="filterSemua()" style="width:115px; height:48px;">
+  Semua
+</button>
+<button class="btn-main" onclick="exportData()" style="width:115px; height:48px;">
+  Backup
+</button>
+<button onclick="ANA.start()" style="
+width:115px;
+height:48px;
+background:#2ecc71;
+color:white;
+border:none;
+border-radius:12px;
+font-weight:bold;
+margin-top:5px;
+">
+🎤 Start
+</button>
+
+<button onclick="ANA.stop()" style="
+width:115px;
+height:48px;
+background:#e74c3c;
+color:white;
+border:none;
+border-radius:12px;
+font-weight:bold;
+margin-top:5px;
+">
+🛑 Stop
+</button>
+<button class="btn-home" onclick="goHome()">🏠 HOME DASHBOARD</button>
+
+<div id="adminForm">
+  <input id="nama" placeholder="Nama">
+  <div id="errNama" class="error-text"></div>
+
+  <input id="kamar" placeholder="Kamar">
+  <div id="errKamar" class="error-text"></div>
+
+  <input id="plat" placeholder="Plat">
+  <input id="plat2" placeholder="Plat Mobil 2 (opsional)">
+  <div id="errPlat" class="error-text"></div>
+
+  <input id="posisi" placeholder="Posisi">
+  <div id="errPosisi" class="error-text"></div>
+
+  <input id="foto1" placeholder="Link Foto Mobil 1">
+<input id="foto2" placeholder="Link Foto Mobil 2 (opsional)">
+  <div id="errFoto" class="error-text"></div>
+
+  <button class="btn-main" onclick="addData()">+ TAMBAH</button>
+</div>
+
+<input id="search" placeholder="Cari...">
+
+<div id="loading">Loading data...</div>
+<div id="judulMode" class="judul-mode"></div>
+<div id="list"></div>
+<!-- IMAGE FULLSCREEN VIEWER -->
+<div id="imgViewer" onclick="closeImg()">
+  <img id="imgFull" src="">
+</div>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } 
+from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCz3MGaM79Mu7Gyao3M1RBLT9Lnmya026o",
+  authDomain: "parkir-mobil.firebaseapp.com",
+  projectId: "parkir-mobil",
+  storageBucket: "parkir-mobil.firebasestorage.app",
+  messagingSenderId: "536896284217",
+  appId: "1:536896284217:web:1404fc21b9a3824a638fe8",
+  measurementId: "G-9KTRSSY1V4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const ref = collection(db,"parkir");
+const visitorRef = collection(db,"visitors");
+
+/* DEVICE INFO */
+function getDeviceInfo(){
+  const ua = navigator.userAgent;
+
+  if(ua.includes("Android")) return "Android 📱";
+  if(ua.includes("iPhone")) return "iPhone 🍎";
+  if(ua.includes("Windows")) return "Windows 💻";
+  if(ua.includes("Mac")) return "Mac 🍏";
+
+  return "Unknown Device";
+}
+
+/* VISITOR LOG */
+let todayKey = "visit_" + new Date().toDateString();
+
+if(!localStorage.getItem(todayKey)){
+
+  addDoc(visitorRef,{
+    device: getDeviceInfo(),
+    userAgent: navigator.userAgent,
+    time: Date.now(),
+    page: "parkir-app"
+  });
+
+  localStorage.setItem(todayKey,"1");
+}
+
+/* REALTIME COUNT */
+onSnapshot(visitorRef,(snap)=>{
+  const totalVisitor = snap.size;
+
+  const box = document.getElementById("visitorBox");
+  if(box){
+    box.innerText = "Visitor " + totalVisitor;
+  }
+});
+
+let isAdmin=false;
+let allData=[];
+let searchValue="";
+let mode="semua";
+
+/* COUNTDOWN */
+function getCountdown(){
+  const now = new Date();
+  const target = new Date();
+  target.setHours(10,0,0,0);
+
+  let diff = target - now;
+  if(diff <= 0) return "Waktu habis";
+
+  let h = Math.floor(diff/3600000);
+  let m = Math.floor((diff%3600000)/60000);
+  let s = Math.floor((diff%60000)/1000);
+
+  return `${h}j ${m}m ${s}d`;
+}
+
+/* AUTO SYSTEM */
+function autoSystem(){
+  const now = new Date();
+  const jam = now.getHours();
+  const menit = now.getMinutes();
+
+  allData.forEach(d=>{
+    if(d.status==="Masuk"){
+
+      if(jam===9 && menit===30 && !d.warning){
+        updateDoc(doc(db,"parkir",d.id),{warning:true});
+      }
+
+      if(jam===10 && menit===0){
+        updateDoc(doc(db,"parkir",d.id),{
+          status:"Keluar",
+          waktuKeluar:Date.now()
+        });
+      }
+
+    }
+  });
+}
+
+setInterval(()=>{
+
+  const now = new Date();
+  const jam = now.getHours();
+  const menit = now.getMinutes();
+
+  allData.forEach(d=>{
+
+    if(d.status !== "Masuk") return;
+
+    if(jam === 10 && menit === 0){
+
+      updateDoc(doc(db,"parkir",d.id),{
+        status:"Keluar",
+        waktuKeluar:Date.now()
+      });
+
+    }
+
+  });
+
+},30000);
+setInterval(render,1000); //
+/* LOGIN */
+window.loginAdmin=function(){
+  const pass=prompt("Masukkan password admin:");
+
+  if(pass==="291995"){
+    isAdmin=true;
+    adminForm.style.display="block";
+    alert("Login berhasil sebagai ADMIN ✅");
+    render();
+    document.getElementById("visitorBox").style.display = "block";
+  } else if(pass!==null){
+    isAdmin=false;
+    adminForm.style.display="none";
+    alert("Password salah ❌");
+    document.getElementById("visitorBox").style.display = "none";
+  }
+};
+
+/* VALIDASI + ADD */
+window.addData = async function(){
+
+  let valid = true;
+
+  const fields = [
+    {el:nama, err:errNama, msg:"Nama wajib diisi"},
+    {el:kamar, err:errKamar, msg:"Kamar wajib diisi"},
+    {el:plat, err:errPlat, msg:"Plat wajib diisi"},
+    {el:posisi, err:errPosisi, msg:"Posisi wajib diisi"},
+    {el:foto1, err:errFoto, msg:"Foto mobil 1 wajib diisi"}
+  ];
+
+  fields.forEach(f=>{
+    f.el.classList.remove("error");
+    f.err.innerText="";
+  });
+
+  fields.forEach(f=>{
+    if(!f.el.value){
+      f.el.classList.add("error");
+      f.err.innerText=f.msg;
+      valid=false;
+    }
+  });
+
+  if(!valid) return;
+
+  await addDoc(ref,{
+  nama:nama.value.toUpperCase(),
+  kamar:kamar.value,
+
+  plat:[
+    plat.value.toUpperCase(),
+    plat2.value.toUpperCase()
+  ],
+
+  posisi:posisi.value,
+
+  foto:[
+  foto1.value,
+  foto2.value || ""
+],
+
+  status:"Masuk",
+  waktuMasuk:Date.now(),
+  warning:false
+});
+
+  nama.value="";
+  kamar.value="";
+  plat.value="";
+  posisi.value="";
+  foto1.value="";
+foto2.value="";
+};
+
+/* SEARCH */
+search.oninput=(e)=>{
+  searchValue=e.target.value.toLowerCase();
+  render();
+};
+
+/* FILTER */
+window.filterMasuk=()=>{mode="masuk";render();}
+window.filterKeluar=()=>{mode="keluar";render();}
+window.filterSemua=()=>{mode="semua";render();}
+
+/* BACKUP */
+window.exportData=()=>{
+  const text = JSON.stringify(allData,null,2);
+  navigator.clipboard.writeText(text);
+  alert("Data berhasil di copy 👍");
+};
+
+/* REALTIME */
+onSnapshot(ref,(snap)=>{
+  loading.style.display="none";
+  allData=[];
+  snap.forEach(d=>allData.push({id:d.id,...d.data()}));
+  render();
+});
+
+/* RENDER */
+function render(){
+
+  list.innerHTML="";
+  judulMode.innerText="";
+
+  let total=allData.length, masuk=0, keluar=0;
+
+  if(mode==="keluar"){
+    judulMode.innerText="DATA MOBIL KELUAR";
+  }
+
+  allData
+  .sort((a,b)=>{
+    if(a.status===b.status){
+      return (b.waktuMasuk||0)-(a.waktuMasuk||0);
+    }
+    return a.status==="Masuk"?-1:1;
+  })
+  .filter(d=>{
+    if(mode==="masuk" && d.status!=="Masuk") return false;
+    if(mode==="keluar" && d.status!=="Keluar") return false;
+
+    return (
+      (d.nama||"") +
+      (d.plat||"") +
+      (d.kamar||"")
+    ).toLowerCase().includes(searchValue);
+  })
+.filter(d=>{
+  if(mode==="masuk" && d.status!=="Masuk") return false;
+  if(mode==="keluar" && d.status!=="Keluar") return false;
+
+  return (
+    (d.nama||"") +
+    (d.plat||"") +
+    (d.kamar||"")
+  ).toLowerCase().includes(searchValue);
+})
+.forEach(d=>{
+
+  if(d.status==="Masuk") masuk++; else keluar++;
+
+  list.innerHTML+=`
+    <div class="card">
+    <div style="margin-bottom:8px;">
+  <b>Status :</b>
+  <span class="${d.status==="Masuk"?"status-masuk":"status-keluar"}">
+    ${d.status}
+  </span>
+</div>
+
+      <div class="field nama">Nama : ${d.nama||"-"}</div>
+      <div class="field kamar">Kamar : ${d.kamar||"-"}</div>
+      <div class="field posisi">Posisi : ${d.posisi||"-"}</div>
+      
+      ${
+  Array.isArray(d.foto)
+  ? d.foto.map((f,i)=>{
+
+      if(!f) return "";
+
+      const plat = Array.isArray(d.plat) ? d.plat[i] || "-" : d.plat || "-";
+
+      return `
+        <div style="margin-top:10px;">
+
+          <div class="field plat">
+           Nomor Plat ${i+1} : ${plat}
+          </div>
+${d.status==="Masuk"
+  ? `<div class="countdown">⏳ ${getCountdown()}</div>`
+  : ""
+}
+          <img src="${f}" onclick="openImg('${f}')">
+
+        </div>
+      `;
+  }).join("")
+  : ""
+}
+
+      ${d.warning
+        ? `<div style="color:#f1c40f;font-size:12px;">⚠️ Segera Checkout</div>`
+        : ""
+      }
+
+      ${(mode!=="keluar" && d.status==="Masuk")
+        ? `<button class="btn-checkout" onclick="checkout('${d.id}')">CHECK OUT</button>`
+        : ""
+      }
+
+      ${(mode==="keluar")
+        ? `<button class="btn-hapus" onclick="hapus('${d.id}')">HAPUS</button>`
+        : ""
+      }
+
+      ${isAdmin ? `
+        <button class="btn-edit"
+        onclick='editData(
+        "${d.id}",
+        "${d.nama}",
+        "${d.plat}",
+        "${d.kamar}",
+        "${d.posisi}",
+        ${JSON.stringify(d.foto || [])}
+        )'>
+        EDIT</button>
+      ` : ""}
+
+    </div>
+  `;
+});
+
+  totalBox.innerText="Total "+total;
+  masukBox.innerText="Masuk "+masuk;
+  keluarBox.innerText="Keluar "+keluar;
+}
+
+/* CHECKOUT */
+window.checkoutMobil = async function(id,index){
+
+  const data = allData.find(d=>d.id===id);
+  if(!data) return;
+
+  data.mobil[index].status = "Keluar";
+
+  await updateDoc(doc(db,"parkir",id),{
+    mobil: data.mobil
+  });
+const semuaKeluar = data.mobil.every(m=>m.status==="Keluar");
+
+if(semuaKeluar){
+  await updateDoc(doc(db,"parkir",id),{
+    status:"Keluar",
+    waktuKeluar:Date.now()
+  });
+}
+
+};
+window.checkout=id=>{
+  if(confirm("Yakin keluar?")){
+    updateDoc(doc(db,"parkir",id),{
+      status:"Keluar",
+      waktuKeluar:Date.now()
+    });
+  }
+};
+window.addEventListener("DOMContentLoaded", () => {
+
+  const img = document.getElementById("imgFull");
+  const viewer = document.getElementById("imgViewer");
+
+  let scale = 1;
+  let startDist = null;
+
+  let posX = 0;
+  let posY = 0;
+
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+
+  const MAX_SCALE = 10;
+  const MIN_SCALE = 1;
+
+  let raf = null;
+
+  function apply(){
+    img.style.transform = `translate(${posX}px,${posY}px) scale(${scale})`;
+  }
+
+  function update(){
+    apply();
+    raf = requestAnimationFrame(update);
+  }
+
+  update();
+
+  window.openImg = function(src){
+    img.src = src;
+    viewer.style.display = "flex";
+
+    scale = 1;
+    posX = 0;
+    posY = 0;
+
+    startDist = null;
+    isDragging = false;
+  };
+
+  window.closeImg = function(){
+    viewer.style.display = "none";
+  };
+
+  function zoom(delta){
+    scale += delta;
+
+    if(scale < MIN_SCALE) scale = MIN_SCALE;
+    if(scale > MAX_SCALE) scale = MAX_SCALE;
+
+    apply();
+  }
+
+  img.addEventListener("wheel",(e)=>{
+    e.preventDefault();
+    zoom(e.deltaY < 0 ? 0.3 : -0.3);
+  }, {passive:false});
+
+  img.addEventListener("touchstart",(e)=>{
+
+    if(e.touches.length === 2){
+      startDist = getDistance(e.touches[0], e.touches[1]);
+    }
+
+    if(e.touches.length === 1){
+      isDragging = true;
+      startX = e.touches[0].clientX - posX;
+      startY = e.touches[0].clientY - posY;
+    }
+  });
+
+  img.addEventListener("touchmove",(e)=>{
+    e.preventDefault();
+
+    /* ===== PINCH ZOOM ===== */
+    if(e.touches.length === 2){
+      const newDist = getDistance(e.touches[0], e.touches[1]);
+
+      if(startDist){
+        scale *= newDist / startDist;
+      }
+
+      startDist = newDist;
+
+      if(scale < MIN_SCALE) scale = MIN_SCALE;
+      if(scale > MAX_SCALE) scale = MAX_SCALE;
+
+      apply();
+      return;
+    }
+
+    /* ===== DRAG (INSTANT + RINGAN) ===== */
+    if(e.touches.length === 1 && isDragging){
+      posX = e.touches[0].clientX - startX;
+      posY = e.touches[0].clientY - startY;
+
+      apply();
+    }
+
+  }, {passive:false});
+
+  img.addEventListener("touchend",()=>{
+    isDragging = false;
+    startDist = null;
+  });
+
+  function getDistance(t1, t2){
+    return Math.hypot(
+      t2.clientX - t1.clientX,
+      t2.clientY - t1.clientY
+    );
+  }
+
+});
+/* HAPUS */
+window.hapus=id=>{
+  if(confirm("Yakin ingin menghapus data ini?")){
+    deleteDoc(doc(db,"parkir",id));
+  }
+};
+
+/* EDIT */
+window.editData=async function(id,n,p,k,po,f){
+
+  const nn=prompt("Nama",n);
+  const pp=prompt("Plat",p);
+  const kk=prompt("Kamar",k);
+  const ppo=prompt("Posisi",po);
+
+  const ff1=prompt("Foto 1", f?.[0] || "");
+  const ff2=prompt("Foto 2", f?.[1] || "");
+
+  await updateDoc(doc(db,"parkir",id),{
+    nama:nn,
+    plat:pp,
+    kamar:kk,
+    posisi:ppo,
+    foto:[ff1, ff2]
+  });
+};
+setInterval(()=>{
+
+  const now = new Date();
+
+  allData.forEach(d=>{
+
+    if(d.status !== "Masuk") return;
+
+    const masuk = new Date(d.waktuMasuk);
+
+    // target jam 10:00 hari ini
+    const target = new Date();
+    target.setHours(10,0,0,0);
+
+    const selisih = target - now;
+
+    const el = document.getElementById("cd_"+d.id);
+
+    if(!el) return;
+
+    if(selisih <= 0){
+      el.innerHTML = "⛔ Waktu habis";
+
+      // AUTO CHECKOUT
+      updateDoc(doc(db,"parkir",d.id),{
+        status:"Keluar",
+        waktuKeluar:Date.now()
+      });
+
+      return;
+    }
+
+    const jam = Math.floor(selisih / 3600000);
+    const menit = Math.floor((selisih % 3600000) / 60000);
+    const detik = Math.floor((selisih % 60000) / 1000);
+
+    el.innerHTML = `⏳ ${jam}j ${menit}m ${detik}d menuju checkout`;
+
+  });
+
+},1000);
+let zoom = 1;
+
+window.goHome = function(){
+
+  window.location.href = window.location.href;
+};
+window.openImg = function(src){
+  const viewer = document.getElementById("imgViewer");
+  const img = document.getElementById("imgFull");
+
+  img.src = src;
+  viewer.style.display = "flex";
+  zoom = 1;
+  img.style.transform = "scale(1)";
+};
+
+window.closeImg = function(){
+  document.getElementById("imgViewer").style.display = "none";
+};
+
+const imgFull = document.getElementById("imgFull");
+
+imgFull.addEventListener("wheel", (e)=>{
+  e.preventDefault();
+
+  if(e.deltaY < 0){
+    zoom += 0.1;
+  }else{
+    zoom -= 0.1;
+  }
+
+  if(zoom < 1) zoom = 1;
+  if(zoom > 4) zoom = 4;
+
+  imgFull.style.transform = `scale(${zoom})`;
+});
+window.ANA = {
+
+  active: false,
+
+  // 🔥 SUARA
+  speak(text){
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "id-ID";
+    msg.rate = 1;
+    speechSynthesis.speak(msg);
+  },
+
+  // 🔥 START VOICE
+  start(){
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+      alert("Browser tidak support voice");
+      return;
+    }
+
+    this.active = true;
+
+    const rec = new SpeechRecognition();
+    rec.lang = "id-ID";
+    rec.continuous = false;
+    rec.interimResults = false;
+
+    rec.onresult = (e)=>{
+      let text = e.results[0][0].transcript;
+
+      console.log("🎤 RAW:", text);
+
+      ANA.process(text);
+    };
+
+    rec.onend = ()=>{
+      if(this.active){
+        rec.start();
+      }
+    };
+
+    rec.start();
+
+    this.speak("ANA aktif");
+  },
+
+  stop(){
+    this.active = false;
+    this.speak("ANA dimatikan");
+  },
+
+  // 🔥 NORMALISASI + FIX TYPO
+  normalize(text){
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g," ")
+      .replace(/kmar/g,"kamar")
+      .replace(/keluarin/g,"keluar")
+      .replace(/ckout/g,"checkout")
+      .replace(/ckot/g,"checkout");
+  },
+
+  // 🔥 AMBIL ANGKA (kamar 04 -> 4)
+  extractNumber(text){
+    const match = text.match(/\d+/);
+    return match ? match[0] : "";
+  },
+
+  // 🔥 PROCESS UTAMA
+  process(text){
+
+    text = this.normalize(text);
+
+    console.log("🧠 NORMALIZED:", text);
+
+    let action = "unknown";
+    let target = "";
+
+    // 🔥 CHECKOUT / KELUAR
+    if(
+      text.includes("checkout") ||
+      text.includes("check out") ||
+      text.includes("keluar")
+    ){
+
+      action = "checkout";
+
+      target = text
+        .replace("checkout","")
+        .replace("check out","")
+        .replace("keluar","")
+        .replace("kamar","")
+        .trim();
+    }
+
+    // 🔥 MASUK
+    else if(text.includes("masuk")){
+      action = "masuk";
+      target = text.replace("masuk","").replace("kamar","").trim();
+    }
+
+    console.log("📦 ACTION:", action, "TARGET:", target);
+
+    this.execute(action, target);
+  },
+
+  // 🔥 EKSEKUSI DATA
+  execute(action, target){
+
+    if(action === "checkout"){
+
+      const data = allData.find(d => {
+
+        const nama = (d.nama || "").toLowerCase();
+        const kamar = (d.kamar || "").toLowerCase();
+
+        let t = target.toLowerCase();
+
+        // 🔥 ambil angka kalau ada
+        const num = this.extractNumber(t);
+
+        const matchKamar = num ? kamar.includes(num) : false;
+        const matchNama = nama.includes(t);
+
+        return matchNama || matchKamar;
+      });
+
+      if(!data){
+        this.speak("Data tidak ditemukan");
+        return;
+      }
+
+      updateDoc(doc(db,"parkir",data.id),{
+        status:"Keluar",
+        waktuKeluar:Date.now()
+      });
+
+      this.speak(`Siap, ANA laksanakan checkout ${data.nama} kamar ${data.kamar}`);
+    }
+
+    else if(action === "masuk"){
+
+      const data = allData.find(d => {
+
+        const nama = (d.nama || "").toLowerCase();
+        const kamar = (d.kamar || "").toLowerCase();
+
+        let t = target.toLowerCase();
+        const num = this.extractNumber(t);
+
+        return nama.includes(t) || kamar.includes(num);
+      });
+
+      if(!data){
+        this.speak("Data tidak ditemukan");
+        return;
+      }
+
+      this.speak(`Data masuk ${data.nama} kamar ${data.kamar}`);
+    }
+
+    else {
+      this.speak("Perintah tidak dikenal");
+    }
+  }
+};
+window.addEventListener("load", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const text = urlParams.get("text");
+
+  if (text) {
+    const input = document.getElementById("input");
+    if (input) {
+      input.value = text;
+    }
+  }
+});
+</script>
+
+</body>
+    </html>
