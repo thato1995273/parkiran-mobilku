@@ -322,10 +322,16 @@ margin-top:5px;
 
 <div id="listPengumuman"></div>
 <div id="adminForm">
+    <button class="btn-filter" onclick="toggleVisitor()">
+    👁️ LIHAT VISITOR
+  </button>
+
+  <input id="nama" placeholder="Nama">
   <input id="nama" placeholder="Nama">
   <div id="errNama" class="error-text"></div>
 
   <input id="kamar" placeholder="Kamar">
+  <input id="kamar2" placeholder="Kamar 2 (opsional)">
   <div id="errKamar" class="error-text"></div>
 
   <input id="plat" placeholder="Plat">
@@ -333,6 +339,7 @@ margin-top:5px;
   <div id="errPlat" class="error-text"></div>
 
   <input id="posisi" placeholder="Posisi">
+  <input id="posisi2" placeholder="Posisi 2 (opsional)">
   <div id="errPosisi" class="error-text"></div>
 
   <input id="foto1" placeholder="Link Foto Mobil 1">
@@ -345,6 +352,18 @@ margin-top:5px;
 <div id="loading">Loading data...</div>
 <div id="judulMode" class="judul-mode"></div>
 <div id="list"></div>
+<div id="visitorSection" style="display:none;">
+
+  <h3>👁️ Visitor List</h3>
+
+  <button onclick="hapusSemuaVisitor()"
+    style="background:#e74c3c;color:white;">
+    🗑 Hapus Semua
+  </button>
+
+  <div id="visitorList"></div>
+
+</div>
 <!-- IMAGE FULLSCREEN VIEWER -->
 <div id="imgViewer" onclick="closeImg()">
   <img id="imgFull" src="">
@@ -354,6 +373,7 @@ margin-top:5px;
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } 
 from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCz3MGaM79Mu7Gyao3M1RBLT9Lnmya026o",
@@ -400,6 +420,32 @@ if(!localStorage.getItem(todayKey)){
 
 /* REALTIME COUNT */
 onSnapshot(visitorRef,(snap)=>{
+  const list = document.getElementById("visitorList");
+if(!list) return;
+
+list.innerHTML = "";
+
+snap.forEach(d=>{
+  const v = d.data();
+
+  list.innerHTML += `
+    <div style="
+      background:#1e1e1e;
+      padding:8px;
+      margin-top:5px;
+      border-radius:8px;
+      font-size:12px;
+    ">
+      📱 ${v.device || "-"} <br>
+      ⏱ ${new Date(v.time).toLocaleString()} <br>
+
+      <button onclick="hapusVisitor('${d.id}')"
+        style="background:red;color:white;margin-top:5px;">
+        Hapus
+      </button>
+    </div>
+  `;
+});
   const totalVisitor = snap.size;
 
   const box = document.getElementById("visitorBox");
@@ -571,14 +617,20 @@ window.addData = async function(){
 
   await addDoc(ref,{
   nama:nama.value.toUpperCase(),
-  kamar:kamar.value,
+  kamar: [
+  kamar.value,
+  kamar2.value || ""
+],
 
   plat:[
     plat.value.toUpperCase(),
     plat2.value.toUpperCase()
   ],
 
-  posisi:posisi.value,
+  posisi: [
+  posisi.value,
+  posisi2.value || ""
+],
 
   foto:[
   foto1.value,
@@ -592,8 +644,10 @@ window.addData = async function(){
 
   nama.value="";
   kamar.value="";
+  kamar2.value="";
   plat.value="";
   posisi.value="";
+  posisi2.value="";
   foto1.value="";
 foto2.value="";
 };
@@ -615,7 +669,17 @@ window.exportData=()=>{
   navigator.clipboard.writeText(text);
   alert("Data berhasil di copy 👍");
 };
+window.toggleVisitor = function(){
 
+  const box = document.getElementById("visitorSection");
+
+  if(box.style.display === "block"){
+    box.style.display = "none";
+  } else {
+    box.style.display = "block";
+  }
+
+};
 /* REALTIME */
 onSnapshot(ref,(snap)=>{
   loading.style.display="none";
@@ -724,16 +788,7 @@ function render(){
       (d.kamar||"")
     ).toLowerCase().includes(searchValue);
   })
-.filter(d=>{
-  if(mode==="masuk" && d.status!=="Masuk") return false;
-  if(mode==="keluar" && d.status!=="Keluar") return false;
 
-  return (
-    (d.nama||"") +
-    (d.plat||"") +
-    (d.kamar||"")
-  ).toLowerCase().includes(searchValue);
-})
 .forEach(d=>{
 
   if(d.status==="Masuk") masuk++; else keluar++;
@@ -748,31 +803,40 @@ function render(){
 </div>
 
       <div class="field nama">Nama : ${d.nama||"-"}</div>
-      <div class="field kamar">Kamar : ${d.kamar||"-"}</div>
-      <div class="field posisi">Posisi : ${d.posisi||"-"}</div>
-      
+
       ${
   Array.isArray(d.foto)
   ? d.foto.map((f,i)=>{
 
       if(!f) return "";
-
+     
       const plat = Array.isArray(d.plat) ? d.plat[i] || "-" : d.plat || "-";
-
+const kamar = Array.isArray(d.kamar) ? d.kamar[i] || "-" : d.kamar || "-";
+const posisi = Array.isArray(d.posisi) ? d.posisi[i] || "-" : d.posisi || "-";
       return `
-        <div style="margin-top:10px;">
+  <div style="margin-top:10px;">
 
-          <div class="field plat">
-           Nomor Plat ${i+1} : ${plat}
-          </div>
-${d.status==="Masuk"
-  ? `<div class="countdown">⏳ ${getCountdown()}</div>`
-  : ""
-}
-          <img src="${f}" onclick="openImg('${f}')">
+    <div class="field kamar">
+      Kamar : ${kamar}
+    </div>
 
-        </div>
-      `;
+    <div class="field posisi">
+      Posisi : ${posisi}
+    </div>
+
+    <div class="field plat">
+      Nomor Plat ${i+1} : ${plat}
+    </div>
+
+    ${d.status==="Masuk"
+      ? `<div class="countdown">⏳ ${getCountdown()}</div>`
+      : ""
+    }
+
+    <img src="${f}" onclick="openImg('${f}')">
+
+  </div>
+`;
   }).join("")
   : ""
 }
@@ -949,7 +1013,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   img.addEventListener("touchend",()=>{
     isDragging = false;
-    startDist =null;
+    startDistnull;
   });
 
   function getDistance(t1, t2){
@@ -966,7 +1030,27 @@ window.hapus=id=>{
     deleteDoc(doc(db,"parkir",id));
   }
 };
+window.hapusVisitor = async function(id){
 
+  try{
+
+    if(!isAdmin){
+      alert("Login admin dulu ❌");
+      return;
+    }
+
+    if(!confirm("Hapus visitor ini?")) return;
+
+    await deleteDoc(doc(db,"visitors",id));
+
+    alert("Berhasil dihapus ✅");
+
+  }catch(e){
+    console.error(e);
+    alert("Error: " + e.message);
+  }
+
+};
 /* EDIT */
 window.editData=async function(id,n,p,k,po,f){
 
